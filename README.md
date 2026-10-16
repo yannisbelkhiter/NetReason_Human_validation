@@ -7,7 +7,7 @@ Each item is a question about a table, with a reference answer. For each item, a
 
 ## Quick start
 
-1. Open `netreason_annotation.html` in a browser.
+1. Open `[netreason_annotation.html](https://yannisbelkhiter.github.io/NetReason_Human_validation/index.html)` in a browser.
 2. Enter your name or ID AS WELL AS YOUR CURRENT ROLE (e.g. PhD student).
 3. Load the dataset file (`data/TO_UPLOAD.json`).
 4. Click **Start evaluating**.
