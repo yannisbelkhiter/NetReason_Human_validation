@@ -1,0 +1,264 @@
+{
+  "annotator_id": "yannis",
+  "exported_at": "2026-10-16T13:18:26.630Z",
+  "n_items": 48,
+  "n_answered": 2,
+  "annotations": [
+    {
+      "sample_id": "93d542ce-60c7-47c5-a59d-dc0774b59599",
+      "question_type": "Data Extraction",
+      "table_broken": false,
+      "trace_score": 10,
+      "notes": "",
+      "time_ms": 39693,
+      "timestamp": "2026-10-16T13:11:58.042Z",
+      "clarity": "clear",
+      "answerable": "yes",
+      "gt": "correct",
+      "answer_correct": "correct"
+    },
+    {
+      "sample_id": "005ce355-e9ce-4aa1-8e40-5f08c19b0625",
+      "question_type": "Answer requiring multiple rows/columns",
+      "table_broken": false,
+      "trace_score": 5,
+      "notes": "",
+      "time_ms": 107899,
+      "timestamp": "2026-10-16T13:13:45.943Z",
+      "clarity": "clear",
+      "answerable": "yes",
+      "gt": "correct",
+      "answer_correct": "partial"
+    },
+    {
+      "sample_id": "746e0fa2-c9d1-4c82-b215-a0480808d0fc",
+      "question_type": "Data Extraction",
+      "answered": false
+    },
+    {
+      "sample_id": "dc10f1fb-bcc1-4d49-8f22-f1e5fd1ce9d2",
+      "question_type": "Logic",
+      "answered": false
+    },
+    {
+      "sample_id": "a228fa63-003d-4bf0-a744-d27a89d6b4ac",
+      "question_type": "Aggregation",
+      "answered": false
+    },
+    {
+      "sample_id": "949d21d3-0f91-49c2-82ec-5734b55eb34a",
+      "question_type": "Aggregation",
+      "answered": false
+    },
+    {
+      "sample_id": "4a2ab570-83a4-4b1c-8252-96b635c1b62f",
+      "question_type": "Data Extraction",
+      "answered": false
+    },
+    {
+      "sample_id": "841a6827-9035-4fcc-9561-1521dbf748ce",
+      "question_type": "Logic",
+      "answered": false
+    },
+    {
+      "sample_id": "f0bbae2c-7aa8-46b6-a133-bab387e87cce",
+      "question_type": "Aggregation",
+      "answered": false
+    },
+    {
+      "sample_id": "ab0f2394-5fa2-45b0-ac31-244e7843c604",
+      "question_type": "Aggregation",
+      "answered": false
+    },
+    {
+      "sample_id": "da6a28b1-b07d-4907-8d01-1c48504db60a",
+      "question_type": "Answer requiring multiple rows/columns",
+      "answered": false
+    },
+    {
+      "sample_id": "33d1f178-d743-4b45-8f73-4f5e1599b0df",
+      "question_type": "Data Extraction",
+      "answered": false
+    },
+    {
+      "sample_id": "027bad26-7157-4426-a163-139571550381",
+      "question_type": "Answer requiring multiple rows/columns",
+      "answered": false
+    },
+    {
+      "sample_id": "a5708cd9-7d17-4ad6-8cbe-b306a3b1b587",
+      "question_type": "Answer requiring multiple rows/columns",
+      "answered": false
+    },
+    {
+      "sample_id": "b0d30ac3-caf8-4641-ae9e-236c5cb95503",
+      "question_type": "Aggregation",
+      "answered": false
+    },
+    {
+      "sample_id": "4d410827-21db-4181-a25b-d67a43b13b01",
+      "question_type": "Aggregation",
+      "answered": false
+    },
+    {
+      "sample_id": "36cee0f1-60f6-4b47-9333-6b6fc874c719",
+      "question_type": "Data Extraction",
+      "answered": false
+    },
+    {
+      "sample_id": "310a8e54-37b5-4b6c-b691-f02b8c61802c",
+      "question_type": "Logic",
+      "answered": false
+    },
+    {
+      "sample_id": "34e1c950-7e85-45d5-92dc-6da184677aef",
+      "question_type": "Data Extraction",
+      "answered": false
+    },
+    {
+      "sample_id": "828b8067-47fc-4188-8aa7-205142ba6419",
+      "question_type": "Answer requiring multiple rows/columns",
+      "answered": false
+    },
+    {
+      "sample_id": "950804f3-6549-4a52-aa99-7d765739899f",
+      "question_type": "Logic",
+      "answered": false
+    },
+    {
+      "sample_id": "4f1696ad-0be2-4782-b25d-1882bcb708e3",
+      "question_type": "Logic",
+      "answered": false
+    },
+    {
+      "sample_id": "141b57d0-3082-46cc-93f4-4b1a29b1e5cf",
+      "question_type": "Data Extraction",
+      "answered": false
+    },
+    {
+      "sample_id": "1fdc9d26-1b6b-405a-a163-16db1383e78b",
+      "question_type": "Answer requiring multiple rows/columns",
+      "answered": false
+    },
+    {
+      "sample_id": "e5fb55a9-16aa-4c09-9ded-3db134c20dff",
+      "question_type": "Aggregation",
+      "answered": false
+    },
+    {
+      "sample_id": "4e2883f6-b22a-4a65-97a4-720ac8b4e6fd",
+      "question_type": "Logic",
+      "answered": false
+    },
+    {
+      "sample_id": "7ea27b33-9610-4669-a80c-6a4016eedb2d",
+      "question_type": "Data Extraction",
+      "answered": false
+    },
+    {
+      "sample_id": "d0cb09b4-451f-43af-bba9-5fe3052bd1ad",
+      "question_type": "Answer requiring multiple rows/columns",
+      "answered": false
+    },
+    {
+      "sample_id": "42c2b93a-fb97-4e4e-a0d7-641e0ee5616d",
+      "question_type": "Logic",
+      "answered": false
+    },
+    {
+      "sample_id": "89f254e5-5cdf-4439-85a1-610a48e75558",
+      "question_type": "Data Extraction",
+      "answered": false
+    },
+    {
+      "sample_id": "60a4cc42-eb38-4b8a-a151-48d8d530dea4",
+      "question_type": "Aggregation",
+      "answered": false
+    },
+    {
+      "sample_id": "d65f311f-696a-4cc3-89a0-7214a648c342",
+      "question_type": "Logic",
+      "answered": false
+    },
+    {
+      "sample_id": "c8e7de34-f8df-4890-bd0e-d703e90162ec",
+      "question_type": "Aggregation",
+      "answered": false
+    },
+    {
+      "sample_id": "2d0b497c-0666-4456-bb29-36346b43fba0",
+      "question_type": "Answer requiring multiple rows/columns",
+      "answered": false
+    },
+    {
+      "sample_id": "586b09a9-0969-4440-817e-65dbe6e43e31",
+      "question_type": "Data Extraction",
+      "answered": false
+    },
+    {
+      "sample_id": "22d7f80e-6013-461f-a262-60801f39a22b",
+      "question_type": "Logic",
+      "answered": false
+    },
+    {
+      "sample_id": "c4e532e3-49de-4557-b0ca-d3888900916a",
+      "question_type": "Data Extraction",
+      "answered": false
+    },
+    {
+      "sample_id": "a7c92fd6-b10a-447f-aa34-cb6c8cc8fe3b",
+      "question_type": "Data Extraction",
+      "answered": false
+    },
+    {
+      "sample_id": "f54a0ab6-1d07-4e20-abf8-24e55a6f960a",
+      "question_type": "Aggregation",
+      "answered": false
+    },
+    {
+      "sample_id": "ef32532d-e129-49f3-b527-e9bcca3abcc2",
+      "question_type": "Logic",
+      "answered": false
+    },
+    {
+      "sample_id": "f125a223-441d-4a56-92c3-56bb4372d938",
+      "question_type": "Answer requiring multiple rows/columns",
+      "answered": false
+    },
+    {
+      "sample_id": "c9cbb876-032d-499f-bcda-24cb2e48be13",
+      "question_type": "Answer requiring multiple rows/columns",
+      "answered": false
+    },
+    {
+      "sample_id": "caa7ca85-147f-421c-b001-7b85a2a19014",
+      "question_type": "Aggregation",
+      "answered": false
+    },
+    {
+      "sample_id": "650a5b6c-3691-4bb1-bdb7-c3202c94d1c9",
+      "question_type": "Logic",
+      "answered": false
+    },
+    {
+      "sample_id": "8ede1430-5906-4a11-afcb-c0e433461e72",
+      "question_type": "Answer requiring multiple rows/columns",
+      "answered": false
+    },
+    {
+      "sample_id": "4f3c1b78-1ef6-490f-bbdc-ac378090d1f1",
+      "question_type": "Logic",
+      "answered": false
+    },
+    {
+      "sample_id": "754138c5-4bc2-4afb-8281-32f0558f93e0",
+      "question_type": "Aggregation",
+      "answered": false
+    },
+    {
+      "sample_id": "c8c358a8-a8f6-4b2a-a046-5b276b67476b",
+      "question_type": "Answer requiring multiple rows/columns",
+      "answered": false
+    }
+  ]
+}

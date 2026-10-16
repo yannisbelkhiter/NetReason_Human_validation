@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Table QA &amp; Trace Evaluation</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F6F7F5;--panel:#fff;--ink:#1B1F23;--muted:#5B6570;--accent:#2A5C57;--accent-ink:#fff;--border:#DCE0DE;--danger:#A23B3B;font-size:16px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14181A;--panel:#1B2124;--ink:#EDEFEE;--muted:#9AA5A8;--accent:#6BC7B5;--accent-ink:#0E1413;--border:#2A3236;--danger:#E08585}}
+:root[data-theme="dark"]{--bg:#14181A;--panel:#1B2124;--ink:#EDEFEE;--muted:#9AA5A8;--accent:#6BC7B5;--accent-ink:#0E1413;--border:#2A3236;--danger:#E08585}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;line-height:1.5}
+.wrap{max-width:900px;margin:0 auto;padding:20px 18px 80px}
+.topbar{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-bottom:14px;margin-bottom:18px;border-bottom:1px solid var(--border)}
+.topbar h1{font-size:1.05rem;font-weight:600;margin:0}
+.sub{color:var(--muted);font-size:.85rem}
+.linklike{background:none;border:none;color:var(--muted);font-size:.8rem;text-decoration:underline;cursor:pointer;padding:0;font-family:inherit}
+.progress-track{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin:-8px 0 16px}
+.progress-fill{height:100%;background:var(--accent);transition:width .25s}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:22px}
+.card+.card{margin-top:16px}
+.card h2.t{font-size:1rem;font-weight:600;margin:0 0 10px}
+.card p{margin:0 0 10px;font-size:.92rem}
+.muted{color:var(--muted);font-size:.85rem}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:.85rem;font-weight:500;margin-bottom:6px}
+.hint{font-size:.78rem;color:var(--muted);margin-top:4px}
+input[type=text]{width:100%;padding:9px 10px;font-size:.95rem;font-family:inherit;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--ink)}
+.btn{display:inline-flex;background:var(--accent);color:var(--accent-ink);border:none;padding:10px 18px;border-radius:7px;font-size:.9rem;font-weight:500;cursor:pointer;font-family:inherit}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.secondary{background:transparent;color:var(--ink);border:1px solid var(--border)}
+.btn:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.notice{font-size:.82rem;padding:10px 12px;border-radius:6px;margin-bottom:16px;background:color-mix(in srgb,var(--accent) 12%,var(--panel));border:1px solid var(--border)}
+.notice.warn{border-color:var(--danger)}
+.block{margin-bottom:18px}
+.block h3{font-size:.8rem;color:var(--muted);font-weight:600;margin:0 0 8px}
+.box{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px 16px;font-family:"IBM Plex Serif",Georgia,serif;white-space:pre-wrap;line-height:1.6}
+.box.q{border:1.5px solid var(--accent);font-size:1.02rem}
+.box.trace{max-height:420px;overflow:auto;font-size:.88rem}
+.tablewrap{overflow:auto;max-height:380px;border:1px solid var(--border);border-radius:8px}
+table{border-collapse:collapse;font-size:.78rem;width:100%}
+th,td{border:1px solid var(--border);padding:4px 7px;text-align:left;vertical-align:top}
+th{background:var(--bg);position:sticky;top:0}
+.meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.chip{font-size:.75rem;border:1px solid var(--border);border-radius:99px;padding:2px 10px;color:var(--muted)}
+.stage{border-top:2px solid var(--accent);padding-top:14px;margin-top:22px}
+.stage h2{font-size:1rem;margin:0 0 12px}
+.options{display:flex;gap:8px;flex-wrap:wrap}
+.opt{display:flex;gap:8px;align-items:flex-start;border:1px solid var(--border);border-radius:8px;padding:8px 12px;cursor:pointer;background:var(--panel);font-size:.88rem}
+.opt:hover{border-color:var(--accent)}
+.opt input{margin-top:3px;accent-color:var(--accent)}
+.opt.checked{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,var(--panel))}
+.scale{display:grid;grid-template-columns:repeat(10,1fr);gap:6px}
+.scale .opt{justify-content:center;padding:8px 0}
+.scale input{position:absolute;opacity:0;pointer-events:none}
+.scale .opt{position:relative;font-weight:500}
+.scale .opt:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
+.scale-lbl{display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted);margin-top:4px}
+textarea{width:100%;font-family:inherit;font-size:.88rem;padding:8px 10px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--ink);resize:vertical;min-height:50px}
+.nav{display:flex;justify-content:space-between;margin-top:22px;padding-top:16px;border-top:1px solid var(--border)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:16px 0}
+.stat{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px}
+.stat .n{font-size:1.3rem;font-weight:600}.stat .l{font-size:.75rem;color:var(--muted)}
+.hidden{display:none!important}
+@media(max-width:560px){.scale{grid-template-columns:repeat(5,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="topbar">
+  <div><h1>Table QA &amp; reasoning-trace evaluation</h1><div class="sub" id="topSub">Judge the question, then the model's reasoning</div></div>
+  <button class="linklike hidden" id="saveBtn">Save progress file</button>
+</div>
+<div class="progress-track hidden" id="track"><div class="progress-fill" id="fill" style="width:0"></div></div>
+
+<div id="setup">
+  <div class="card">
+    <h2 class="t">What this is</h2>
+    <p>Each item is a question about a table, with a reference answer. You do two things:</p>
+    <ol style="margin:0 0 10px;padding-left:20px;font-size:.92rem">
+      <li><strong>Judge the Q&amp;A pair</strong> against the table: is the question clear, answerable from the table, and is the reference answer right?</li>
+      <li><strong>Score one reasoning trace</strong> from a model, from 1 (poor) to 10 (excellent).</li>
+    </ol>
+    <p class="muted">Tables come from automatic extraction and can be misaligned (merged cells flattened). If the table is broken, tick the flag so it isn't mistaken for a bad question.</p>
+  </div>
+  <div class="card">
+    <h2 class="t">Session setup</h2>
+    <div class="field"><label for="annot">Your name or ID</label><input type="text" id="annot" placeholder="e.g. yannis"><div class="hint">Names your export file and saves progress in this browser.</div></div>
+    <div class="field"><label for="dataFile">Dataset file <span style="color:var(--danger)">(required)</span></label>
+      <input type="file" id="dataFile" accept=".json,.jsonl,.csv,.tsv">
+      <div class="hint">JSON, JSONL, CSV or TSV with <code>sample_id</code>, <code>question</code>, <code>ground_truth</code> (or <code>answer</code>), <code>table</code> (or <code>context</code>). Optional: <code>question_type</code>, <code>table_name</code>, <code>document_name</code>, <code>reasoning_trace</code>, <code>model_final_answer</code>. This is the file produced by the sampling script.</div></div>
+    <div class="field"><label style="display:flex;gap:8px;align-items:center;font-weight:400"><input type="checkbox" id="shuffle" checked> Shuffle item order</label></div>
+    <div id="setupNotice"></div>
+    <button class="btn" id="startBtn" disabled>Start evaluating</button>
+    <button class="btn secondary hidden" id="resumeBtn">Resume saved session</button>
+  </div>
+</div>
+
+<div class="card hidden" id="annoScreen">
+  <div class="meta" id="meta"></div>
+  <div class="block"><h3>Table</h3><div class="tablewrap" id="tableBox"></div></div>
+  <div class="block"><h3>Question</h3><div class="box q" id="qText"></div></div>
+  <div class="block"><h3>Reference answer (ground truth)</h3><div class="box" id="gtText"></div></div>
+
+  <div class="stage">
+    <h2>1. Is this a good Q&amp;A pair?</h2>
+    <div id="stage1"></div>
+    <label class="opt" style="display:inline-flex;margin-bottom:6px"><input type="checkbox" id="tableBroken"> Table extraction looks broken or misaligned</label>
+  </div>
+
+  <div class="stage" id="stage2">
+    <h2>2. Rate the reasoning trace</h2>
+    <div class="block"><h3>Question</h3><div class="box q" id="qText2"></div></div>
+    <div class="block"><h3 id="traceHead">Reasoning (&lt;think&gt;)</h3><div class="box trace" id="traceText"></div></div>
+    <div class="block"><h3>Answer</h3><div class="box" id="modelAns"></div></div>
+    <div id="stage2q"></div>
+    <div class="block"><h3>Overall score (1 = poor, 10 = excellent)</h3>
+      <div class="scale" id="scale"></div>
+      <div class="scale-lbl"><span>Wrong / incoherent</span><span>Correct and sound</span></div></div>
+  </div>
+  <div class="notice hidden" id="noTrace">No reasoning trace for this item — only the Q&amp;A pair needs rating.</div>
+
+  <div class="field" style="margin-top:18px"><label for="notes">Notes (optional)</label><textarea id="notes" placeholder="Optional"></textarea></div>
+  <div class="nav"><button class="btn secondary" id="prevBtn">&larr; Previous</button><button class="btn" id="nextBtn" disabled>Next &rarr;</button></div>
+</div>
+
+<div class="card hidden" id="finish">
+  <h2 class="t">All items evaluated — thank you.</h2>
+  <div class="stats" id="stats"></div>
+  <button class="btn" id="dlBtn">Download results (.json)</button>
+  <button class="btn secondary" id="restartBtn">Start a new session</button>
+</div>
+</div>
+
+<script>
+const GROUPS1=[
+ {id:'clarity',label:'Question clarity',opts:[['clear','Clear and unambiguous'],['ambiguous','Ambiguous'],['flawed','Flawed / ill-posed']]},
+ {id:'answerable',label:'Answerable from the table alone?',opts:[['yes','Yes, fully'],['partial','Partially'],['no','No']]},
+ {id:'gt',label:'Is the reference answer correct?',opts:[['correct','Correct'],['partial','Partly correct / incomplete'],['incorrect','Incorrect'],['unsure','Cannot tell']]}
+];
+const GROUPS2=[
+ {id:'answer_correct',label:'Is the model\'s final answer correct (judged against the table)?',opts:[['correct','Correct'],['partial','Partly correct'],['incorrect','Incorrect']]}
+];
+const $=id=>document.getElementById(id);
+const S={annot:'',items:[],responses:{},order:[],pos:0,t0:0};
+let loaded=null,traces=null;
+
+const esc=s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const key=it=>String(it.sample_id);
+const skey=()=>'qa_eval_'+S.annot.replace(/[^a-z0-9_-]/gi,'_');
+
+/* ---- parsing ---- */
+function parseDelimited(t,d){const rows=[];let r=[],f='',q=false;
+ for(let i=0;i<t.length;i++){const c=t[i];
+  if(q){if(c==='"'){if(t[i+1]==='"'){f+='"';i++}else q=false}else f+=c}
+  else if(c==='"'&&f==='')q=true;
+  else if(c===d){r.push(f);f=''}
+  else if(c==='\n'||c==='\r'){if(c==='\r'&&t[i+1]==='\n')i++;r.push(f);f='';rows.push(r);r=[]}
+  else f+=c}
+ if(f!==''||r.length){r.push(f);rows.push(r)}
+ return rows.filter(r=>!(r.length===1&&r[0].trim()===''))}
+function rowsToRecords(rows){
+ if(rows.length<2)throw new Error('Need a header row and at least one data row.');
+ const names=rows[0].map(h=>h.trim().toLowerCase().replace(/\s+/g,'_'));
+ return rows.slice(1).map(c=>{const off=c.length===names.length+1?1:0;const o={};
+  names.forEach((n,j)=>{if(n&&n!=='index'&&n!=='unnamed:_0')o[n]=c[j+off]});return o})}
+async function readRecords(file){
+ const text=(await file.text()).replace(/^\uFEFF/,'').trim();
+ if(!text)throw new Error('The file is empty.');
+ if(text[0]==='['||text[0]==='{'){
+  try{const p=JSON.parse(text);
+   if(Array.isArray(p))return p;
+   const arr=Object.values(p).find(Array.isArray);
+   if(arr)return arr;
+   throw new Error('JSON object has no array of records.')}
+  catch(e){
+   if(e.message.startsWith('JSON object'))throw e;
+   try{return text.split(/\r?\n/).filter(l=>l.trim()).map(l=>JSON.parse(l))}
+   catch(e2){throw new Error('Not valid JSON or JSON Lines: '+e.message)}}}
+ const n=file.name.toLowerCase(),fl=text.split(/\r?\n/,1)[0];
+ const d=n.endsWith('.tsv')||(!n.endsWith('.csv')&&(fl.match(/\t/g)||[]).length>(fl.match(/,/g)||[]).length)?'\t':',';
+ return rowsToRecords(parseDelimited(text,d))}
+const pick=(r,...ks)=>{for(const k of ks){const v=r[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v}return ''};
+function normItem(r){return{
+ sample_id:pick(r,'sample_id','id'),question:pick(r,'question'),
+ ground_truth:pick(r,'ground_truth','answer'),table:pick(r,'table','context'),
+ question_type:pick(r,'question_type'),table_name:pick(r,'table_name'),
+ document_name:pick(r,'document_name','doc_name'),
+ trace:pick(r,'reasoning_trace','trace','reasoning'),
+ model_answer:pick(r,'model_final_answer','final_answer'),model:pick(r,'model')}}
+
+/* ---- table rendering ---- */
+function renderTable(md){
+ const lines=String(md).split('\n');
+ const isRow=l=>l.trim().startsWith('|');
+ if(lines.filter(isRow).length<2)return `<div class="box" style="border:none">${esc(md)}</div>`;
+ const cells=l=>{let s=l.trim();if(s.startsWith('|'))s=s.slice(1);if(s.endsWith('|'))s=s.slice(0,-1);return s.split('|').map(c=>c.trim())};
+ const rows=lines.filter(isRow).filter(l=>!/^\|?\s*:?-{2,}/.test(l.trim())).map(cells);
+ const head=rows.shift();
+ return `<table><thead><tr>${head.map(c=>`<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>${
+  rows.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`}
+
+/* ---- setup ---- */
+function setNotice(m,w){$('setupNotice').innerHTML=m?`<div class="notice ${w?'warn':''}">${esc(m)}</div>`:''}
+function refresh(){$('startBtn').disabled=!($('annot').value.trim()&&loaded&&loaded.length)}
+function checkSaved(){const id=$('annot').value.trim();$('resumeBtn').classList.add('hidden');if(!id)return;
+ try{const r=localStorage.getItem('qa_eval_'+id.replace(/[^a-z0-9_-]/gi,'_'));
+  if(r&&Object.keys(JSON.parse(r).responses||{}).length)$('resumeBtn').classList.remove('hidden')}catch(e){}}
+function summarize(){
+ if(!loaded)return;
+ const withTrace=loaded.filter(i=>i.trace||(traces&&traces[key(i)])).length;
+ setNotice(`Loaded ${loaded.length} item(s); ${withTrace} with a reasoning trace.`+(withTrace===0?' Stage 2 will be skipped.':''),withTrace===0)}
+
+$('annot').addEventListener('input',()=>{refresh();checkSaved()});
+$('dataFile').addEventListener('change',async e=>{
+ const f=e.target.files[0];if(!f)return;loaded=null;
+ try{const recs=(await readRecords(f)).map(normItem);
+  const bad=recs.findIndex(r=>r.sample_id===''||!r.question||!r.table);
+  if(bad!==-1)throw new Error(`Row ${bad+1} is missing sample_id, question or table/context.`);
+  const seen=new Set();recs.forEach(r=>{r.sample_id=String(r.sample_id);if(seen.has(r.sample_id))throw new Error('Duplicate sample_id: '+r.sample_id);seen.add(r.sample_id)});
+  loaded=recs;summarize()}
+ catch(err){setNotice('Could not read dataset: '+err.message,true)}
+ refresh()});
+
+function begin(resume){
+ S.annot=$('annot').value.trim();S.items=loaded;S.responses={};S.pos=0;
+ let order=S.items.map((_,i)=>i);
+ if(resume){try{const s=JSON.parse(localStorage.getItem(skey()));
+   if(s.responses)S.responses=s.responses;
+   if(Array.isArray(s.order)&&s.order.length===order.length)order=s.order}catch(e){}}
+ else if($('shuffle').checked){for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]]}}
+ S.order=order;
+ if(resume){const u=order.findIndex(i=>!S.responses[key(S.items[i])]);S.pos=u===-1?order.length-1:u}
+ $('setup').classList.add('hidden');$('annoScreen').classList.remove('hidden');$('finish').classList.add('hidden');
+ $('track').classList.remove('hidden');$('saveBtn').classList.remove('hidden');
+ buildStatic();render()}
+$('startBtn').addEventListener('click',()=>begin(false));
+$('resumeBtn').addEventListener('click',()=>{if(!loaded){setNotice('Load the same dataset first, then resume.',true);return}begin(true)});
+
+/* ---- item UI ---- */
+function groupHtml(g){return `<div class="block"><h3>${esc(g.label)}</h3><div class="options">${
+ g.opts.map(([v,l])=>`<label class="opt"><input type="radio" name="${g.id}" value="${v}"> ${esc(l)}</label>`).join('')}</div></div>`}
+function buildStatic(){
+ $('stage1').innerHTML=GROUPS1.map(groupHtml).join('');
+ $('stage2q').innerHTML=GROUPS2.map(groupHtml).join('');
+ $('scale').innerHTML=Array.from({length:10},(_,i)=>`<label class="opt"><input type="radio" name="score" value="${i+1}">${i+1}</label>`).join('')}
+function splitThink(raw){
+ const s=String(raw||''),m=s.match(/<\/think>/i);
+ if(m)return{tagged:true,think:s.slice(0,m.index).replace(/^\s*<think>/i,'').trim(),answer:s.slice(m.index+m[0].length).trim()};
+ if(/^\s*<think>/i.test(s))return{tagged:true,think:s.replace(/^\s*<think>/i,'').trim(),answer:''};
+ return{tagged:false,think:'',answer:s.trim()}}
+function traceFor(it){
+ const t=(traces&&traces[key(it)])||(it.trace?it:null);
+ if(!t)return null;
+ const p=splitThink(t.trace),fb=t.model_answer||it.model_answer;
+ // untagged text plus a separate final-answer column: treat the text as the reasoning
+ if(!p.tagged&&fb)return{think:p.answer,answer:fb,model:t.model};
+ return{think:p.think,answer:p.answer||fb,model:t.model}}
+const radioVal=n=>{const e=document.querySelector(`input[name=${n}]:checked`);return e?e.value:null};
+function styleChecked(){document.querySelectorAll('.opt').forEach(o=>{const i=o.querySelector('input');o.classList.toggle('checked',!!i&&i.checked)})}
+function curItem(){return S.items[S.order[S.pos]]}
+
+function render(){
+ const it=curItem(),ex=S.responses[key(it)];
+ $('topSub').textContent=`Item ${S.pos+1} of ${S.order.length} — ${S.annot}`;
+ $('fill').style.width=(S.pos/S.order.length*100)+'%';
+ $('meta').innerHTML=[it.question_type,it.table_name,it.document_name].filter(Boolean).map(x=>`<span class="chip">${esc(x)}</span>`).join('');
+ $('tableBox').innerHTML=renderTable(it.table);
+ $('qText').textContent=it.question;$('gtText').textContent=it.ground_truth;
+ const tr=traceFor(it);S.hasTrace=!!tr;
+ $('stage2').classList.toggle('hidden',!tr);$('noTrace').classList.toggle('hidden',!!tr);
+ if(tr){$('qText2').textContent=it.question;
+  $('traceText').textContent=tr.think||'(no <think> content found)';
+  $('modelAns').textContent=tr.answer||'(no answer found after </think>)';
+  $('traceHead').textContent='Reasoning (<think>)'+(tr.model?` — ${tr.model}`:'');$('traceText').scrollTop=0}
+ const set=(n,v)=>document.querySelectorAll(`input[name=${n}]`).forEach(r=>r.checked=v!=null&&String(v)===r.value);
+ GROUPS1.forEach(g=>set(g.id,ex&&ex[g.id]));GROUPS2.forEach(g=>set(g.id,ex&&ex[g.id]));
+ set('score',ex&&ex.trace_score);
+ $('tableBroken').checked=!!(ex&&ex.table_broken);
+ $('notes').value=ex?ex.notes||'':'';
+ $('prevBtn').disabled=S.pos===0;
+ $('nextBtn').textContent=S.pos===S.order.length-1?'Finish':'Next \u2192';
+ styleChecked();refreshNext();window.scrollTo(0,0);S.t0=performance.now()}
+function complete(){
+ if(!GROUPS1.every(g=>radioVal(g.id)))return false;
+ if(S.hasTrace&&!(radioVal('score')&&GROUPS2.every(g=>radioVal(g.id))))return false;
+ return true}
+function refreshNext(){$('nextBtn').disabled=!complete()}
+function save(){
+ if(!complete())return false;
+ const it=curItem(),prev=S.responses[key(it)];
+ const r={sample_id:it.sample_id,question_type:it.question_type,table_broken:$('tableBroken').checked,
+  trace_score:S.hasTrace?Number(radioVal('score')):null,notes:$('notes').value.trim(),
+  time_ms:(prev?prev.time_ms||0:0)+Math.round(performance.now()-S.t0),timestamp:new Date().toISOString()};
+ GROUPS1.forEach(g=>r[g.id]=radioVal(g.id));
+ GROUPS2.forEach(g=>r[g.id]=S.hasTrace?radioVal(g.id):null);
+ S.responses[key(it)]=r;persist();return true}
+function persist(){try{localStorage.setItem(skey(),JSON.stringify({responses:S.responses,order:S.order}))}catch(e){}}
+
+$('annoScreen').addEventListener('change',()=>{styleChecked();refreshNext()});
+$('nextBtn').addEventListener('click',()=>{if(!save())return;
+ if(S.pos===S.order.length-1)showFinish();else{S.pos++;render()}});
+$('prevBtn').addEventListener('click',()=>{save();if(S.pos>0){S.pos--;render()}});
+
+/* ---- finish / export ---- */
+function buildExport(){return{annotator_id:S.annot,exported_at:new Date().toISOString(),
+ n_items:S.order.length,n_answered:Object.keys(S.responses).length,
+ annotations:S.order.map(i=>{const it=S.items[i];return S.responses[key(it)]||{sample_id:it.sample_id,question_type:it.question_type,answered:false}})}}
+function download(obj,name){const a=document.createElement('a');
+ a.href=URL.createObjectURL(new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}));
+ a.download=name;document.body.appendChild(a);a.click();a.remove()}
+function showFinish(){
+ $('annoScreen').classList.add('hidden');$('finish').classList.remove('hidden');$('fill').style.width='100%';
+ const rs=Object.values(S.responses),n=rs.length||1;
+ const pct=f=>Math.round(100*rs.filter(f).length/n)+'%';
+ const sc=rs.map(r=>r.trace_score).filter(v=>v!=null);
+ const avg=sc.length?(sc.reduce((a,b)=>a+b,0)/sc.length).toFixed(1):'—';
+ $('stats').innerHTML=[[`${rs.length}/${S.order.length}`,'items evaluated'],[pct(r=>r.clarity==='clear'),'questions rated clear'],
+  [pct(r=>r.answerable==='yes'),'fully answerable'],[pct(r=>r.gt==='correct'),'reference correct'],
+  [pct(r=>r.table_broken),'table flagged broken'],[avg,'mean trace score (1–10)']]
+  .map(([a,b])=>`<div class="stat"><div class="n">${a}</div><div class="l">${b}</div></div>`).join('')}
+$('saveBtn').addEventListener('click',()=>{save();download(buildExport(),`qa_eval_${S.annot}_progress.json`)});
+$('dlBtn').addEventListener('click',()=>download(buildExport(),`qa_eval_${S.annot}.json`));
+$('restartBtn').addEventListener('click',()=>{$('finish').classList.add('hidden');$('setup').classList.remove('hidden');
+ $('track').classList.add('hidden');$('saveBtn').classList.add('hidden');$('topSub').textContent='Judge the question, then the model\'s reasoning'});
+</script>
+</body>
+</html>
